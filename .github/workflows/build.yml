@@ -153,6 +153,12 @@ jobs:
           convert -size 192x192 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
           convert -size 192x192 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
 
+      - name: Fix missing strings in strings.xml
+        run: |
+          STRINGS_FILE="ExcelTableApp/app/src/main/res/values/strings.xml"
+          # app_tagline missing hai - add karo closing tag se pehle
+          sed -i 's|</resources>|    <string name="app_tagline">WhatsApp Data Extraction Tool</string>\n    <string name="btn_toggle_bubble">Toggle Bubble</string>\n    <string name="permission_overlay_card">Overlay Permission</string>\n    <string name="permission_accessibility_card">Accessibility Permission</string>\n</resources>|' "$STRINGS_FILE"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
