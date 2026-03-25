@@ -21,41 +21,37 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Create root build.gradle
+        run: |
+          cat > ExcelTableApp/build.gradle << 'EOF'
+          buildscript {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.2.0'
+              }
+          }
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          EOF
+
       - name: Create settings.gradle
         run: |
           cat > ExcelTableApp/settings.gradle << 'EOF'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
           rootProject.name = "FieldDataCollector"
           include ':app'
           EOF
 
-      - name: Create root build.gradle
-        run: |
-          cat > ExcelTableApp/build.gradle << 'EOF'
-          plugins {
-              id 'com.android.application' version '8.2.0' apply false
-          }
-          EOF
-
-      - name: Create app/build.gradle
+      - name: Update app/build.gradle
         run: |
           cat > ExcelTableApp/app/build.gradle << 'EOF'
-          plugins {
-              id 'com.android.application'
-          }
+          apply plugin: 'com.android.application'
 
           android {
               namespace 'com.example.fielddatacollector'
@@ -81,7 +77,7 @@ jobs:
                   targetCompatibility JavaVersion.VERSION_17
               }
 
-              packaging {
+              packagingOptions {
                   resources {
                       excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE',
                                    'META-INF/LICENSE.txt', 'META-INF/NOTICE',
@@ -106,86 +102,64 @@ jobs:
           }
           EOF
 
-      - name: Create gradle wrapper files
+      - name: Generate Gradle Wrapper
         run: |
-          mkdir -p ExcelTableApp/gradle/wrapper
-          cat > ExcelTableApp/gradle/wrapper/gradle-wrapper.properties << 'EOF'
-          distributionBase=GRADLE_USER_HOME
-          distributionPath=wrapper/dists
-          distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip
-          networkTimeout=10000
-          validateDistributionUrl=true
-          zipStoreBase=GRADLE_USER_HOME
-          zipStorePath=wrapper/dists
-          EOF
+          cd ExcelTableApp
+          gradle wrapper --gradle-version 8.6
 
-      - name: Download gradle-wrapper.jar
-        run: |
-          curl -L -o ExcelTableApp/gradle/wrapper/gradle-wrapper.jar \
-            "https://github.com/gradle/gradle/raw/v8.6.0/gradle/wrapper/gradle-wrapper.jar"
-
-      - name: Create gradlew script
-        run: |
-          cat > ExcelTableApp/gradlew << 'GRADLEW'
-          #!/bin/sh
-          APP_HOME="$(cd "$(dirname "$0")" && pwd)"
-          CLASSPATH="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
-          exec "$JAVA_HOME/bin/java" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
-          GRADLEW
-          chmod +x ExcelTableApp/gradlew
-
-      - name: Create launcher icons (placeholder)
+      - name: Create launcher icons
         run: |
           sudo apt-get install -y imagemagick
-          mkdir -p ExcelTableApp/app/src/main/res/mipmap-mdpi
-          mkdir -p ExcelTableApp/app/src/main/res/mipmap-hdpi
-          mkdir -p ExcelTableApp/app/src/main/res/mipmap-xhdpi
-          mkdir -p ExcelTableApp/app/src/main/res/mipmap-xxhdpi
-          mkdir -p ExcelTableApp/app/src/main/res/mipmap-xxxhdpi
-          convert -size 48x48 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          convert -size 48x48 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          convert -size 72x72 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          convert -size 72x72 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          convert -size 96x96 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          convert -size 96x96 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          convert -size 144x144 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          convert -size 144x144 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          convert -size 192x192 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          convert -size 192x192 xc:#2196F3 ExcelTableApp/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          BASE_DIR="ExcelTableApp/app/src/main/res"
+          for size in 48:mdpi 72:hdpi 96:xhdpi 144:xxhdpi 192:xxxhdpi; do
+            IFS=":" read -r res name <<< "$size"
+            mkdir -p "$BASE_DIR/mipmap-$name"
+            convert -size ${res}x${res} xc:#2196F3 "$BASE_DIR/mipmap-$name/ic_launcher.png"
+            convert -size ${res}x${res} xc:#2196F3 "$BASE_DIR/mipmap-$name/ic_launcher_round.png"
+          done
 
-      - name: Fix missing strings in strings.xml
+      - name: Fix strings.xml
         run: |
           STRINGS_FILE="ExcelTableApp/app/src/main/res/values/strings.xml"
-          # app_tagline missing hai - add karo closing tag se pehle
-          sed -i 's|</resources>|    <string name="app_tagline">WhatsApp Data Extraction Tool</string>\n    <string name="btn_toggle_bubble">Toggle Bubble</string>\n    <string name="permission_overlay_card">Overlay Permission</string>\n    <string name="permission_accessibility_card">Accessibility Permission</string>\n</resources>|' "$STRINGS_FILE"
+          # Purani file rewrite karke sare tags ensure karein
+          cat > "$STRINGS_FILE" << 'EOF'
+          <resources>
+              <string name="app_name">FieldDataCollector</string>
+              <string name="app_tagline">WhatsApp Data Extraction Tool</string>
+              <string name="btn_toggle_bubble">Toggle Bubble</string>
+              <string name="permission_overlay_card">Overlay Permission</string>
+              <string name="permission_accessibility_card">Accessibility Permission</string>
+          </resources>
+          EOF
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: wrapper
-          cache-read-only: false
+          gradle-version: 8.6
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
         working-directory: ExcelTableApp
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: ExcelTableApp/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
+          path: ExcelTableApp/app/build/outputs/apk/debug/*.apk
 
       - name: Build Release APK (unsigned)
-        run: ./gradlew assembleRelease --stacktrace --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --stacktrace
         working-directory: ExcelTableApp
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-unsigned
-          path: ExcelTableApp/app/build/outputs/apk/release/app-release-unsigned.apk
-          retention-days: 30
+          path: ExcelTableApp/app/build/outputs/apk/release/*.apk
 
   release:
     needs: build
@@ -193,22 +167,15 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-      - name: Download Debug APK
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: app-debug
-
-      - name: Download Release APK
-        uses: actions/download-artifact@v4
-        with:
-          name: app-release-unsigned
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            app-debug.apk
-            app-release-unsigned.apk
+            app-debug/*.apk
+            app-release-unsigned/*.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
