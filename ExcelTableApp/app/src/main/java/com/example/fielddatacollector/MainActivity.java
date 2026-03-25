@@ -33,8 +33,6 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements DataManager.DataChangeListener {
     
-    private static final int REQUEST_OVERLAY = 1001;
-    
     // UI Elements - Status indicators
     private View statusClipboard;
     private View statusBubble;
@@ -54,6 +52,14 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
     
     private DataManager dataManager;
     private MediaProjectionManager projectionManager;
+    
+    // Overlay permission launcher
+    private final ActivityResultLauncher<Intent> overlayPermissionLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            updateUI();
+        }
+    );
     
     // Screen capture permission launcher
     private final ActivityResultLauncher<Intent> screenCaptureLauncher = registerForActivityResult(
@@ -247,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:" + getPackageName())
             );
-            startActivityForResult(intent, REQUEST_OVERLAY);
+            overlayPermissionLauncher.launch(intent);
         } else {
             Toast.makeText(this, "Overlay permission already granted", Toast.LENGTH_SHORT).show();
         }
@@ -340,15 +346,6 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
             startActivity(Intent.createChooser(shareIntent, "Share Excel File"));
         } catch (Exception e) {
             Toast.makeText(this, "Share error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        
-        if (requestCode == REQUEST_OVERLAY) {
-            updateUI();
         }
     }
     
