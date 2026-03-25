@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,16 +35,22 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
     
     private static final int REQUEST_OVERLAY = 1001;
     
-    // UI Elements
-    private View statusBubbleIndicator;
-    private View statusAccessibilityIndicator;
-    private View statusDataIndicator;
-    private TextView statusBubbleText;
-    private TextView statusAccessibilityText;
-    private TextView statusDataText;
-    private ImageView iconOverlay;
-    private ImageView iconAccessibility;
+    // UI Elements - Status indicators
+    private View statusClipboard;
+    private View statusBubble;
+    private TextView txtClipboardStatus;
+    private TextView txtBubbleStatus;
+    private TextView txtRecordCount;
+    
+    // Buttons
     private Button btnToggleBubble;
+    private Button btnSetupAccessibility;
+    private Button btnViewTable;
+    private Button btnExportExcel;
+    private Button btnShareExcel;
+    private Button btnParseManual;
+    private Button btnClearInput;
+    private EditText editManualInput;
     
     private DataManager dataManager;
     private MediaProjectionManager projectionManager;
@@ -109,67 +115,97 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
     }
     
     private void initViews() {
-        statusBubbleIndicator = findViewById(R.id.status_bubble_indicator);
-        statusAccessibilityIndicator = findViewById(R.id.status_accessibility_indicator);
-        statusDataIndicator = findViewById(R.id.status_data_indicator);
-        statusBubbleText = findViewById(R.id.status_bubble_text);
-        statusAccessibilityText = findViewById(R.id.status_accessibility_text);
-        statusDataText = findViewById(R.id.status_data_text);
-        iconOverlay = findViewById(R.id.icon_overlay);
-        iconAccessibility = findViewById(R.id.icon_accessibility);
-        btnToggleBubble = findViewById(R.id.btn_toggle_bubble);
+        // Status indicators
+        statusClipboard = findViewById(R.id.statusClipboard);
+        statusBubble = findViewById(R.id.statusBubble);
+        txtClipboardStatus = findViewById(R.id.txtClipboardStatus);
+        txtBubbleStatus = findViewById(R.id.txtBubbleStatus);
+        txtRecordCount = findViewById(R.id.txtRecordCount);
+        
+        // Buttons
+        btnToggleBubble = findViewById(R.id.btnToggleBubble);
+        btnSetupAccessibility = findViewById(R.id.btnSetupAccessibility);
+        btnViewTable = findViewById(R.id.btnViewTable);
+        btnExportExcel = findViewById(R.id.btnExportExcel);
+        btnShareExcel = findViewById(R.id.btnShareExcel);
+        btnParseManual = findViewById(R.id.btnParseManual);
+        btnClearInput = findViewById(R.id.btnClearInput);
+        editManualInput = findViewById(R.id.editManualInput);
     }
     
     private void setupListeners() {
         // Toggle Bubble button
         btnToggleBubble.setOnClickListener(v -> toggleBubble());
         
-        // Open Table button
-        findViewById(R.id.btn_open_table).setOnClickListener(v -> {
+        // Setup Accessibility button
+        btnSetupAccessibility.setOnClickListener(v -> openAccessibilitySettings());
+        
+        // View Table button
+        btnViewTable.setOnClickListener(v -> {
             startActivity(new Intent(this, TableActivity.class));
         });
         
-        // Export button
-        findViewById(R.id.btn_export).setOnClickListener(v -> exportData());
+        // Export Excel button
+        btnExportExcel.setOnClickListener(v -> exportData());
         
-        // Clear button
-        findViewById(R.id.btn_clear).setOnClickListener(v -> showClearDialog());
+        // Share Excel button
+        btnShareExcel.setOnClickListener(v -> {
+            List<FieldData> data = dataManager.getAllData();
+            if (data.isEmpty()) {
+                Toast.makeText(this, "No data to share", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            exportAndShare();
+        });
         
-        // Overlay permission click
-        findViewById(R.id.permission_overlay).setOnClickListener(v -> requestOverlayPermission());
+        // Parse Manual button
+        btnParseManual.setOnClickListener(v -> parseManualInput());
         
-        // Accessibility permission click
-        findViewById(R.id.permission_accessibility).setOnClickListener(v -> openAccessibilitySettings());
+        // Clear Input button
+        btnClearInput.setOnClickListener(v -> {
+            editManualInput.setText("");
+        });
+    }
+    
+    private void parseManualInput() {
+        String text = editManualInput.getText().toString().trim();
+        if (text.isEmpty()) {
+            Toast.makeText(this, "Please enter text to parse", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        // Use MessageParser to parse the text
+        FieldData parsedData = MessageParser.parse(text);
+        
+        if (parsedData != null && parsedData.hasAutoData()) {
+            dataManager.addOrUpdateCurrentRow(parsedData);
+            Toast.makeText(this, "Data parsed successfully!", Toast.LENGTH_SHORT).show();
+            editManualInput.setText("");
+            updateUI();
+        } else {
+            Toast.makeText(this, "Could not parse the text. Check format.", Toast.LENGTH_SHORT).show();
+        }
     }
     
     private void updateUI() {
         // Update bubble status
         boolean bubbleRunning = FloatingBubbleService.isRunning();
-        statusBubbleIndicator.setBackgroundResource(
+        statusBubble.setBackgroundResource(
             bubbleRunning ? R.drawable.status_indicator_active : R.drawable.status_indicator_inactive
         );
-        statusBubbleText.setText("Floating Bubble: " + (bubbleRunning ? "Active" : "Disabled"));
-        btnToggleBubble.setText(bubbleRunning ? R.string.btn_disable_bubble : R.string.btn_enable_bubble);
+        txtBubbleStatus.setText(bubbleRunning ? "Active" : "Disabled");
+        btnToggleBubble.setText(bubbleRunning ? "Disable Floating Bubble" : "Enable Floating Bubble");
         
         // Update accessibility status
         boolean accessibilityEnabled = ClipboardAccessibilityService.isAccessibilityServiceEnabled(this);
-        statusAccessibilityIndicator.setBackgroundResource(
+        statusClipboard.setBackgroundResource(
             accessibilityEnabled ? R.drawable.status_indicator_active : R.drawable.status_indicator_inactive
         );
-        statusAccessibilityText.setText("Clipboard Listener: " + (accessibilityEnabled ? "Active" : "Disabled"));
+        txtClipboardStatus.setText(accessibilityEnabled ? "Active" : "Disabled");
         
-        // Update data status
+        // Update record count
         int rowCount = dataManager.getRowCount();
-        int completedCount = dataManager.getCompletedRowCount();
-        statusDataText.setText("Data: " + completedCount + "/" + rowCount + " rows complete");
-        
-        // Update permission icons
-        boolean hasOverlay = Settings.canDrawOverlays(this);
-        iconOverlay.setImageResource(hasOverlay ? android.R.drawable.ic_menu_save : android.R.drawable.ic_menu_help);
-        iconOverlay.setColorFilter(getResources().getColor(hasOverlay ? R.color.success : R.color.text_secondary));
-        
-        iconAccessibility.setImageResource(accessibilityEnabled ? android.R.drawable.ic_menu_save : android.R.drawable.ic_menu_help);
-        iconAccessibility.setColorFilter(getResources().getColor(accessibilityEnabled ? R.color.success : R.color.text_secondary));
+        txtRecordCount.setText(String.valueOf(rowCount));
     }
     
     private void toggleBubble() {
@@ -229,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
     private void exportData() {
         List<FieldData> data = dataManager.getAllData();
         
-        if (data.isEmpty() || (data.size() == 1 && !data.get(0).hasAutoData())) {
+        if (data.isEmpty()) {
             Toast.makeText(this, "No data to export", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -244,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
                     if (file != null && file.exists()) {
                         showExportSuccess(file);
                     } else {
-                        Toast.makeText(this, getString(R.string.toast_export_failed), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Export failed", Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (Exception e) {
@@ -255,11 +291,35 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
         }).start();
     }
     
+    private void exportAndShare() {
+        List<FieldData> data = dataManager.getAllData();
+        
+        Toast.makeText(this, "Preparing to share...", Toast.LENGTH_SHORT).show();
+        
+        new Thread(() -> {
+            try {
+                File file = ExcelExporter.export(this, data);
+                
+                runOnUiThread(() -> {
+                    if (file != null && file.exists()) {
+                        shareFile(file);
+                    } else {
+                        Toast.makeText(this, "Could not create file", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        }).start();
+    }
+    
     private void showExportSuccess(File file) {
         new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.toast_export_success))
+            .setTitle("Export Successful!")
             .setMessage("File: " + file.getName())
-            .setPositiveButton(getString(R.string.btn_share), (d, w) -> shareFile(file))
+            .setPositiveButton("Share", (d, w) -> shareFile(file))
             .setNegativeButton("OK", null)
             .show();
     }
@@ -273,23 +333,10 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.btn_share)));
+            startActivity(Intent.createChooser(shareIntent, "Share Excel File"));
         } catch (Exception e) {
             Toast.makeText(this, "Share error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-    }
-    
-    private void showClearDialog() {
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.dialog_clear_title))
-            .setMessage(getString(R.string.dialog_clear_message))
-            .setPositiveButton("Clear", (d, w) -> {
-                dataManager.clearAllData();
-                Toast.makeText(this, getString(R.string.toast_data_cleared), Toast.LENGTH_SHORT).show();
-                updateUI();
-            })
-            .setNegativeButton(getString(R.string.btn_cancel), null)
-            .show();
     }
     
     @Override
