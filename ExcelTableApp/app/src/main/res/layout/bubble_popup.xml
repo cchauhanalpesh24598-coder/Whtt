@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_card"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/surface">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Row Data"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+            
+            <TextView
+                android:id="@+id/popup_row_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Row 1"
+                android:textSize="14sp"
+                android:textColor="@color/primary"
+                android:background="@drawable/card_background"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp" />
+                
+        </LinearLayout>
+        
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/divider" />
+        
+        <!-- Data Preview -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <!-- Bank Name -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Bank:"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+                
+                <TextView
+                    android:id="@+id/popup_bank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_primary"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
+            
+            <!-- Applicant Name -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Applicant:"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+                
+                <TextView
+                    android:id="@+id/popup_applicant"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_primary"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
+            
+            <!-- Reason -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Reason:"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+                
+                <TextView
+                    android:id="@+id/popup_reason"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_primary"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
+            
+            <!-- Lat-Long To -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Lat-Long:"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+                
+                <TextView
+                    android:id="@+id/popup_latlong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_primary"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
+            
+        </LinearLayout>
+        
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/divider" />
+        
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <!-- Scan Button -->
+            <Button
+                android:id="@+id/btn_scan"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="@string/btn_scan"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/text_on_primary" />
+            
+            <!-- Next Row Button -->
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="@string/btn_next_row"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_secondary"
+                android:textColor="@color/primary" />
+                
+        </LinearLayout>
+        
+        <!-- View Table Button -->
+        <Button
+            android:id="@+id/btn_view_table"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/btn_open_table"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:background="@drawable/button_secondary"
+            android:textColor="@color/primary" />
+        
+    </LinearLayout>
+    
+</androidx.cardview.widget.CardView>

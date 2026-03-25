@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- App Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_tagline"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Status Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service Status"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Clipboard Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:id="@+id/statusClipboard"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/status_indicator_inactive" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Clipboard Listener"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/txtClipboardStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Disabled"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
+            <!-- Floating Bubble Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:id="@+id/statusBubble"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/status_indicator_inactive" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Floating Bubble"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/txtBubbleStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Disabled"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
+            <!-- Records Count -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/status_indicator_active" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Records"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/txtRecordCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Quick Actions Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quick Actions"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Toggle Floating Bubble -->
+            <Button
+                android:id="@+id/btnToggleBubble"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Enable Floating Bubble"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_primary"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Setup Accessibility -->
+            <Button
+                android:id="@+id/btnSetupAccessibility"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Setup Clipboard Listener"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_secondary"
+                android:layout_marginBottom="8dp" />
+
+            <!-- View Table -->
+            <Button
+                android:id="@+id/btnViewTable"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="View Data Table"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_secondary" />
+        </LinearLayout>
+
+        <!-- Manual Entry Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manual Entry"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Paste WhatsApp message here for manual parsing"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/editManualInput"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="R.v(Fedbank)\n1)applicant:- Name Here\n..."
+                android:gravity="top|start"
+                android:padding="12dp"
+                android:background="@drawable/cell_border"
+                android:textSize="13sp"
+                android:textColor="@color/text_primary"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnParseManual"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:text="Parse Text"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_primary"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnClearInput"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:text="Clear"
+                    android:textColor="@color/error"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_secondary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Export Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Export Data"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnExportExcel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Export Excel"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_primary"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnShareExcel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Share"
+                    android:textColor="@color/primary"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_secondary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Instructions Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How to Use"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. Enable Floating Bubble and Clipboard Listener\n2. Open WhatsApp and copy any field message\n3. App will auto-extract Bank, Applicant, Reason\n4. Open GPS photo in WhatsApp, tap bubble Scan\n5. Lat-Long will be extracted via OCR\n6. View Table to see all data, Export to Excel"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:lineSpacingMultiplier="1.4" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

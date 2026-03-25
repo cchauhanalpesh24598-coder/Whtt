@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Field Data Collector</string>
+    
+    <!-- Main Activity -->
+    <string name="title_main">Field Data Collector</string>
+    <string name="subtitle_main">WhatsApp Data Extraction Tool</string>
+    
+    <!-- Buttons -->
+    <string name="btn_enable_bubble">Enable Floating Bubble</string>
+    <string name="btn_disable_bubble">Disable Floating Bubble</string>
+    <string name="btn_open_table">Open Data Table</string>
+    <string name="btn_export_excel">Export to Excel</string>
+    <string name="btn_clear_data">Clear All Data</string>
+    <string name="btn_scan">Scan Image</string>
+    <string name="btn_next_row">Next Row</string>
+    <string name="btn_manual_edit">Manual Edit</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_share">Share</string>
+    
+    <!-- Permissions -->
+    <string name="permission_overlay">Overlay Permission</string>
+    <string name="permission_overlay_desc">Required to show floating bubble over other apps</string>
+    <string name="permission_accessibility">Accessibility Service</string>
+    <string name="permission_accessibility_desc">Required for auto clipboard detection</string>
+    <string name="permission_storage">Storage Permission</string>
+    <string name="permission_storage_desc">Required to save Excel files</string>
+    <string name="btn_grant_permission">Grant Permission</string>
+    
+    <!-- Status Messages -->
+    <string name="status_bubble_enabled">Bubble is active</string>
+    <string name="status_bubble_disabled">Bubble is disabled</string>
+    <string name="status_accessibility_enabled">Clipboard listener active</string>
+    <string name="status_accessibility_disabled">Clipboard listener inactive</string>
+    <string name="status_ready">Ready to capture data</string>
+    
+    <!-- Table Headers -->
+    <string name="header_sr_no">Sr No</string>
+    <string name="header_bank_name">Bank Name</string>
+    <string name="header_applicant_name">Applicant Name</string>
+    <string name="header_status">Status</string>
+    <string name="header_reason">Reason</string>
+    <string name="header_latlong_from">Lat-Long From</string>
+    <string name="header_latlong_to">Lat-Long To</string>
+    <string name="header_area">Area</string>
+    <string name="header_km">Km</string>
+    
+    <!-- Hints -->
+    <string name="hint_status">Enter status</string>
+    <string name="hint_latlong_from">Enter lat-long</string>
+    <string name="hint_area">Enter area</string>
+    <string name="hint_km">Enter km</string>
+    
+    <!-- Toast Messages -->
+    <string name="toast_data_extracted">Data extracted successfully</string>
+    <string name="toast_ocr_success">Lat-Long captured: %s</string>
+    <string name="toast_ocr_failed">Could not extract lat-long</string>
+    <string name="toast_clipboard_empty">Clipboard is empty</string>
+    <string name="toast_row_complete">Row %d complete</string>
+    <string name="toast_export_success">Excel exported to Downloads</string>
+    <string name="toast_export_failed">Export failed</string>
+    <string name="toast_data_cleared">All data cleared</string>
+    <string name="toast_permission_required">Permission required</string>
+    
+    <!-- Dialog Messages -->
+    <string name="dialog_clear_title">Clear All Data?</string>
+    <string name="dialog_clear_message">This will delete all captured data. This action cannot be undone.</string>
+    <string name="dialog_manual_input_title">Manual Input</string>
+    <string name="dialog_ocr_failed_title">OCR Failed</string>
+    <string name="dialog_ocr_failed_message">Could not extract lat-long from image. Please enter manually.</string>
+    
+    <!-- Accessibility Service -->
+    <string name="accessibility_service_description">This service monitors clipboard to automatically capture WhatsApp message data when you copy text.</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_name">Field Data Collector</string>
+    <string name="notification_channel_desc">Shows status of data capture service</string>
+    <string name="notification_bubble_title">Bubble Active</string>
+    <string name="notification_bubble_text">Tap to open app</string>
+    <string name="notification_capture_title">Screen Capture</string>
+    <string name="notification_capture_text">Ready to capture screen for OCR</string>
+    
+    <!-- Empty States -->
+    <string name="empty_table">No data captured yet</string>
+    <string name="empty_table_hint">Copy a WhatsApp message to start</string>
+</resources>

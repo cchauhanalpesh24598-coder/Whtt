@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+    
+    <!-- Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/primary"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+        
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="Back"
+            android:tint="@color/text_on_primary" />
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Data Table"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_on_primary" />
+        
+        <TextView
+            android:id="@+id/row_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 rows"
+            android:textSize="14sp"
+            android:textColor="@color/text_on_primary"
+            android:alpha="0.8" />
+            
+    </LinearLayout>
+    
+    <!-- Table Container with Horizontal Scroll -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            
+            <!-- Header Row -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+                
+                <LinearLayout
+                    android:id="@+id/header_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/table_header">
+                    
+                    <!-- Sr No -->
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_sr_no"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border" />
+                    
+                    <!-- Bank Name -->
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_bank_name"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border" />
+                    
+                    <!-- Applicant Name -->
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_applicant_name"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border" />
+                    
+                    <!-- Status -->
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_status"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border_manual" />
+                    
+                    <!-- Reason -->
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_reason"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border" />
+                    
+                    <!-- Lat-Long From -->
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_latlong_from"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border_manual" />
+                    
+                    <!-- Lat-Long To -->
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_latlong_to"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border" />
+                    
+                    <!-- Area -->
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_area"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border_manual" />
+                    
+                    <!-- Km -->
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/header_km"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:background="@drawable/cell_border_manual" />
+                        
+                </LinearLayout>
+            </HorizontalScrollView>
+            
+            <!-- Data Rows RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/table_recycler"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+                
+        </LinearLayout>
+    </HorizontalScrollView>
+    
+    <!-- Bottom Action Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="@color/surface"
+        android:elevation="8dp">
+        
+        <Button
+            android:id="@+id/btn_add_row"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Add Row"
+            android:textAllCaps="false"
+            android:background="@drawable/button_secondary"
+            android:textColor="@color/primary" />
+        
+        <Button
+            android:id="@+id/btn_export"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="@string/btn_export_excel"
+            android:textAllCaps="false"
+            android:background="@drawable/button_primary"
+            android:textColor="@color/text_on_primary" />
+            
+    </LinearLayout>
+    
+</LinearLayout>

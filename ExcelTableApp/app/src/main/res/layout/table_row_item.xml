@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="52dp">
+    
+    <!-- Sr No (Auto) -->
+    <TextView
+        android:id="@+id/cell_sr_no"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border"
+        android:padding="4dp" />
+    
+    <!-- Bank Name (Auto) -->
+    <TextView
+        android:id="@+id/cell_bank"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border"
+        android:padding="4dp"
+        android:ellipsize="end"
+        android:maxLines="2" />
+    
+    <!-- Applicant Name (Auto) -->
+    <TextView
+        android:id="@+id/cell_applicant"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border"
+        android:padding="4dp"
+        android:ellipsize="end"
+        android:maxLines="2" />
+    
+    <!-- Status (Manual - Editable) -->
+    <EditText
+        android:id="@+id/cell_status"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border_manual"
+        android:padding="4dp"
+        android:hint="@string/hint_status"
+        android:textColorHint="@color/text_hint"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionNext" />
+    
+    <!-- Reason (Auto) -->
+    <TextView
+        android:id="@+id/cell_reason"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border"
+        android:padding="4dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+    
+    <!-- Lat-Long From (Manual - Editable) -->
+    <EditText
+        android:id="@+id/cell_latlong_from"
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border_manual"
+        android:padding="4dp"
+        android:hint="@string/hint_latlong_from"
+        android:textColorHint="@color/text_hint"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:imeOptions="actionNext" />
+    
+    <!-- Lat-Long To (Auto from OCR) -->
+    <TextView
+        android:id="@+id/cell_latlong_to"
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border"
+        android:padding="4dp"
+        android:ellipsize="end"
+        android:maxLines="1" />
+    
+    <!-- Area (Manual - Editable) -->
+    <EditText
+        android:id="@+id/cell_area"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border_manual"
+        android:padding="4dp"
+        android:hint="@string/hint_area"
+        android:textColorHint="@color/text_hint"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionNext" />
+    
+    <!-- Km (Manual - Editable) -->
+    <EditText
+        android:id="@+id/cell_km"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/cell_border_manual"
+        android:padding="4dp"
+        android:hint="@string/hint_km"
+        android:textColorHint="@color/text_hint"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        android:imeOptions="actionDone" />
+        
+</LinearLayout>
