@@ -1,0 +1,83 @@
+name: Android Build APK
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # Sab Gradle wrapper files automatically generate hongi
+    - name: Generate Gradle Wrapper (All Files Auto-Generated)
+      run: |
+        cd ExcelTableApp
+        
+        # System gradle se wrapper generate karo - ye sab files bana dega:
+        # - gradlew (Linux/Mac script)
+        # - gradlew.bat (Windows script)  
+        # - gradle/wrapper/gradle-wrapper.jar
+        # - gradle/wrapper/gradle-wrapper.properties
+        gradle wrapper --gradle-version 8.6
+        
+        # Verify sab files ban gayi
+        echo "Generated files:"
+        ls -la gradlew gradlew.bat gradle/wrapper/
+
+    # Launcher icons generate karo agar missing hain
+    - name: Generate Launcher Icons (If Missing)
+      run: |
+        BASE_DIR="ExcelTableApp/app/src/main/res"
+        
+        # Check karo agar icons already exist karti hain
+        if [ ! -f "$BASE_DIR/mipmap-hdpi/ic_launcher.png" ]; then
+          echo "Icons missing, generating..."
+          sudo apt-get install -y imagemagick
+          
+          for size in 48:mdpi 72:hdpi 96:xhdpi 144:xxhdpi 192:xxxhdpi; do
+            IFS=":" read -r res name <<< "$size"
+            mkdir -p "$BASE_DIR/mipmap-$name"
+            convert -size ${res}x${res} xc:#2196F3 -fill white -gravity center -pointsize $((res/3)) -annotate 0 "FD" "$BASE_DIR/mipmap-$name/ic_launcher.png"
+            convert -size ${res}x${res} xc:#2196F3 -fill white -gravity center -pointsize $((res/3)) -annotate 0 "FD" "$BASE_DIR/mipmap-$name/ic_launcher_round.png"
+          done
+          echo "Icons generated successfully!"
+        else
+          echo "Icons already exist, skipping generation."
+        fi
+
+    # Gradle caching for faster builds
+    - name: Setup Gradle with Caching
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: 8.6
+        cache-read-only: false
+
+    # Build the APK
+    - name: Build Debug APK
+      working-directory: ExcelTableApp
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleDebug --stacktrace --no-daemon
+
+    # Upload the APK as artifact
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: FieldDataCollector-debug
+        path: ExcelTableApp/app/build/outputs/apk/debug/app-debug.apk
+        if-no-files-found: error
+        retention-days: 30
+
