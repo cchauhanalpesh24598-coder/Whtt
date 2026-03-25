@@ -175,10 +175,14 @@ public class MainActivity extends AppCompatActivity implements DataManager.DataC
         }
         
         // Use MessageParser to parse the text
-        FieldData parsedData = MessageParser.parse(text);
+        MessageParser.ParseResult parseResult = MessageParser.parse(text);
         
-        if (parsedData != null && parsedData.hasAutoData()) {
-            dataManager.addOrUpdateCurrentRow(parsedData);
+        if (parseResult != null && parseResult.isValid) {
+            // Create FieldData from ParseResult
+            FieldData fieldData = new FieldData();
+            fieldData.updateFromMessage(parseResult.bankName, parseResult.applicantName, parseResult.reason);
+            
+            dataManager.addOrUpdateCurrentRow(fieldData);
             Toast.makeText(this, "Data parsed successfully!", Toast.LENGTH_SHORT).show();
             editManualInput.setText("");
             updateUI();
